@@ -1,0 +1,24 @@
+#! /bin/sh
+exec huginn -E "${0}" "${@}"
+#! huginn
+
+/* First Huginn programme. */
+
+main( argv_ ) {
+	print( "Hello World!\n" );
+	argc = size( argv_ );
+	print( "number of arguments: " + string( argc ) + "\n" );
+	i = 0;
+	while ( i < argc ) {
+		print( "argv_[" + string( i ) + "]: " + argv_[i] + "\n" );
+		i += 1;
+	}
+	if ( argc >= 3 ) {
+		base = number( argv_[1] );
+		exp = number( argv_[2] );
+		print( argv_[1] + " ^ " + argv_[2] + " = " + string( base ^ exp ) + "\n" );
+	} else {
+		print( "Not enough arguments to calculate power.\n" );
+	}
+	return ( 0 );
+}

@@ -1,0 +1,36 @@
+#! /bin/sh
+exec huginn -E "${0}" "${@}"
+#! huginn
+
+main( argv_ ) {
+	print( "Select number to describe: " );
+	rawSel = input().strip();
+	sel = integer( rawSel );
+	print( "You selected `" + rawSel + "' to describe.\n" );
+	switch ( sel ) {
+		case ( 0 ): {
+			print(
+				"`Zero' is an identity element\n"
+				"in Real numbers set with '+' operation.\n"
+			);
+		} break;
+		case ( 1 ): {
+			print(
+				"`One' is identity element\n"
+				"in Real numbers set with '*' operation.\n"
+			);
+		} break;
+		case ( 2 ): {} /* fall through */
+		case ( 3 ): {} /* fall through */
+		case ( 4 ): {
+			print( "`" + rawSel + "' is less than 5.\n" );
+		} break;
+		case ( 7 ): {
+			print( "`Seven' is considered lucky number by some.\n" );
+		} break;
+		default: {
+			print( "I do not know anything about your number.\n" );
+		}
+	}
+	return ( 0 );
+}

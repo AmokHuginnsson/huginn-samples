@@ -1,0 +1,23 @@
+#! /bin/sh
+exec huginn -E "${0}" "${@}"
+#! huginn
+
+main( argv_ ) {
+	badWords = set( "equality", "nurture", "environment" );
+	skipOnce = true;
+	for ( w : argv_ ) {
+		if ( skipOnce ) {
+			skipOnce = false;
+			continue;
+		}
+		if ( badWords.has_key( w ) ) {
+			print(
+				"I wholeheartedly reject " + w + ",\n"
+				"commie propaganda won't fly here, bye.\n"
+			);
+			break;
+		}
+		print( "I can like this " + w + " thingy :)\n" );
+	}
+	return ( 0 );
+}

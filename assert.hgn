@@ -1,0 +1,9 @@
+#! /bin/sh
+exec huginn -E "${0}" "${@}"
+#! huginn
+
+main( argv_ ) {
+	assert ( size( argv_ ) > 1, "missing argument" );
+	assert ( integer( argv_[1] ) == 42, "not life, universe and everything else" );
+	return ( 0 );
+}

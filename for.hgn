@@ -1,0 +1,10 @@
+#! /bin/sh
+exec huginn -E "${0}" "${@}"
+#! huginn
+
+main( argv_ ) {
+	for ( arg : argv_ ) {
+		print( "arg = " + arg + "\n" );
+	}
+	return ( 0 );
+}

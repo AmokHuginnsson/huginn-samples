@@ -1,0 +1,36 @@
+#! /bin/sh
+exec huginn -E "${0}" "${@}"
+#! huginn
+
+fib( n_ ) {
+	x = 1;
+	a = number( 0 );
+	b = number( 1 );
+	while ( x < n_ ) {
+		t = a;
+		a = copy( b );
+		b += t;
+		x += 1;
+	}
+	if ( n_ == 0 ) {
+		b = 0;
+	}
+	return ( b );
+}
+
+main( argv_ ) {
+	if ( size( argv_ ) < 2 ) {
+		print(
+			"Not enough arguments,"
+			" you have to specify a number\n"
+		);
+		return ( 1 );
+	}
+	n = integer( argv_[1] );
+	if ( n < 0 ) {
+		print( "you must specify non-negative number\n" );
+		return ( 2 );
+	}
+	print( "fib(" + argv_[1] + ") = " + string( fib( n ) ) + "\n" );
+	return ( 0 );
+}

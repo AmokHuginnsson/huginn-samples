@@ -1,0 +1,15 @@
+#! /bin/sh
+exec huginn -E "${0}" "${@}"
+#! huginn
+
+main( argv_ ) {
+	while ( size( line = input().strip() ) > 0 ) {
+		x = integer( line );
+		if ( x > 10 ) {
+			print( line + " is too much for me :(\n" );
+			break;
+		}
+		print( line + " squared is " + string( x * x ) + "\n" );
+	}
+	return ( 0 );
+}

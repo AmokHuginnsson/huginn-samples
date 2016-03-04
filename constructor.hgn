@@ -1,0 +1,18 @@
+#! /bin/sh
+exec huginn -E "${0}" "${@}"
+#! huginn
+
+class Point {
+	_x = 0;
+	_y = 0;
+	constructor( x_, y_ ) {
+		_x = x_;
+		_y = y_;
+	}
+}
+
+main( argv_ ) {
+	p = Point( 1, 2 );
+	print( "p = (" + string( p._x ) + "," + string( p._y ) + ")\n" );
+	return ( 0 );
+}

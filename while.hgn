@@ -1,0 +1,12 @@
+#! /bin/sh
+exec huginn -E "${0}" "${@}"
+#! huginn
+
+main( argv_ ) {
+	i = 0;
+	while ( i < size( argv_ ) ) {
+		print( "argv_[" + string( i ) + "] = " + argv_[i] + "\n" );
+		i += 1;
+	}
+	return ( 0 );
+}
