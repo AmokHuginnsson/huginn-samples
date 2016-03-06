@@ -1,5 +1,5 @@
 #! /bin/sh
-exec huginn -E "${0}" "${@}"
+exec huginn --no-argv -E "${0}" "${@}"
 #! huginn
 
 class Point {
@@ -11,7 +11,7 @@ class Point {
 	}
 }
 
-main( argv_ ) {
+main() {
 	p = Point( 1, 2 );
 	print( "p = (" + string( p._x ) + "," + string( p._y ) + ")\n" );
 	return ( 0 );

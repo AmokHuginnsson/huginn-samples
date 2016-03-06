@@ -1,8 +1,8 @@
 #! /bin/sh
-exec huginn -E "${0}" "${@}"
+exec huginn --no-argv -E "${0}" "${@}"
 #! huginn
 
-main( argv_ ) {
+main() {
 	print( "Select number to describe: " );
 	rawSel = input().strip();
 	sel = integer( rawSel );
