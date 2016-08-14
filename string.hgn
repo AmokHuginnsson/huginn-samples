@@ -1,0 +1,18 @@
+#! /bin/sh
+exec huginn --no-argv -E "${0}" "${@}"
+#! huginn
+
+main() {
+	s = "manhole cover";
+	print( s + "\n" );
+	s.replace( "hole co", "ou" );
+	print( s + "\n" );
+	s.to_upper();
+	print( s + "\n" );
+	print( "VER at " + string( s.find( "VER" ) ) + "\n" );
+	print( ( s = s[1::2].to_lower() ) + "\n" );
+	print( s.strip( "ar" ) + "\n" );
+	s.clear();
+	print( "[" + s + "]\n" );
+	return ( 0 );
+}

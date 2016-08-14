@@ -3,17 +3,18 @@ exec huginn --no-argv -E "${0}" "${@}"
 #! huginn
 
 main() {
-	x = 22.;
-	y = 333.;
-	p = 7.;
-	q = 16.;
+	x = 2.2;
+	y = 33.3;
+	p = -7.;
+	q = -1.6;
 	print( "x = " + string( x ) + "\n" );
 	print( "type of x is " + type( x ) + "\n" );
 	n = x + y;
 	print( "n = " + string( n ) + "\n" );
 	print( "type of n is " + type( n ) + "\n" );
 	d = p * q;
-	d += 1.;
+	d += .1;
+	p *= .1;
 	print( "d = " + string( d ) + "\n" );
 	print( "type of d is " + type( d ) + "\n" );
 	print( "pi ~~ " + string( x / p ) + "\n" );
