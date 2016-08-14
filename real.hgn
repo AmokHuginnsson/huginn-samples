@@ -14,7 +14,7 @@ main() {
 	print( "type of n is " + type( n ) + "\n" );
 	d = p * q;
 	d += .1;
-	p *= .1;
+	p *= -.1;
 	print( "d = " + string( d ) + "\n" );
 	print( "type of d is " + type( d ) + "\n" );
 	print( "pi ~~ " + string( x / p ) + "\n" );
