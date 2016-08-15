@@ -1,0 +1,4 @@
+#! /bin/sh
+exec huginn --no-argv -E "${0}" "${@}"
+#! huginn
+main(){}

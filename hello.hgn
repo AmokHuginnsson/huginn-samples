@@ -1,0 +1,12 @@
+#! /bin/sh
+exec huginn -E "${0}" "${@}"
+#! huginn
+
+main( argv_ ) {
+	if ( size( argv_ ) > 1 ) {
+		print( "Hello " + argv_[1] + "!\n" );
+	} else {
+		print( "Hello World!\n" );
+	}
+	return ( 0 );
+}
