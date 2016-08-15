@@ -1,0 +1,23 @@
+#! /bin/sh
+exec huginn --no-argv -E "${0}" "${@}"
+#! huginn
+
+is( x ) {
+	return ( x ? "is" : "is not" );
+}
+
+main() {
+	c = 'f';
+	print( "type of c is " + type( c ) + "\n" );
+	print( "value of c is " + string( c ) + "\n" );
+	print( "c is " + ( c.is_upper() ? "upper" : "lower" ) + "case character\n" );
+	c.to_upper();
+	print( "now value of c is " + string( c ) + "\n" );
+	s = "Hello";
+	print( "type of s[0] is " + type( s[0] ) + "\n" );
+	print( "value of s[0] is " + string( s[0] ) + "\n" );
+	print( "s[0] is " + ( ! s[0].is_lower() ? "upper" : "lower" ) + "case character\n" );
+	print( "c " + is( c.is_xdigit() ) + " hexadecimal\n" );
+	print( "s[0] " + is( s[0].is_xdigit() ) + " hexadecimal\n" );
+	return ( 0 );
+}

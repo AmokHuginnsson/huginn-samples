@@ -1,0 +1,21 @@
+#! /bin/sh
+exec huginn --no-argv -E "${0}" "${@}"
+#! huginn
+
+main() {
+	b = 17 % 4 == 3;
+	print( "type of b is " + type( b ) + "\n" );
+	if ( b ) {
+		print( "value of b is true\n" );
+	} else {
+		print( "value of b is false\n" );
+	}
+	x = | -10 | > 5;
+	print( "type of x is " + type( x ) + "\n" );
+	if ( ! x ) {
+		print( "value of x is false\n" );
+	} else {
+		print( "value of x is true\n" );
+	}
+	return ( 0 );
+}
