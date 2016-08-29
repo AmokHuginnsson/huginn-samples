@@ -1,0 +1,37 @@
+#! /bin/sh
+exec huginn --no-argv -E "${0}" "${@}"
+#! huginn
+
+show_state( x, n ) {
+	print( "type of " + n + " list is " + string( type( x ) ) + "\n" );
+	print( "size of " + n + " list is " + string( size( x ) ) + "\n" );
+	print( "content of " + n + " list: [" );
+	next = false;
+	for ( e : x ) {
+		if ( next ) {
+			print( ", " );
+		}
+		next = true;
+		print( e );
+	}
+	print( "]\n" );
+}
+
+main() {
+	l = list();
+	show_state( l, "l" );
+	l2 = list( 1, 2, 4 );
+	show_state( l2, "l2" );
+	l3 = [2, 3, 5, 7];
+	print( "type of l3[1] element is " + string( type( l3[1] ) ) + "\n" );
+	print( "value of l3[1] element is " + string( l3[1] ) + "\n" );
+	show_state( l3, "l3" );
+	l = l2;
+	l.add( 8 );
+	show_state( l[::-1], "l" );
+	show_state( l2, "l2" );
+	l3.pop();
+	show_state( l3, "l3" );
+	l.clear();
+	show_state( l, "l" );
+}
