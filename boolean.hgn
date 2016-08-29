@@ -4,14 +4,14 @@ exec huginn --no-argv -E "${0}" "${@}"
 
 main() {
 	b = 17 % 4 == 3;
-	print( "type of b is " + type( b ) + "\n" );
+	print( "type of b is " + string( type( b ) ) + "\n" );
 	if ( b ) {
 		print( "value of b is true\n" );
 	} else {
 		print( "value of b is false\n" );
 	}
 	x = | -10 | > 5;
-	print( "type of x is " + type( x ) + "\n" );
+	print( "type of x is " + string( type( x ) ) + "\n" );
 	if ( ! x ) {
 		print( "value of x is false\n" );
 	} else {

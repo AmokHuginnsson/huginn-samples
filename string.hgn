@@ -5,6 +5,7 @@ exec huginn --no-argv -E "${0}" "${@}"
 main() {
 	s = "manhole cover";
 	print( s + "\n" );
+	print( "type of s is " + string( type( s ) ) + "\n" );
 	s.replace( "hole co", "ou" );
 	print( s + "\n" );
 	s.to_upper();

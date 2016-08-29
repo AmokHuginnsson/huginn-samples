@@ -12,15 +12,15 @@ main() {
 	u = $744;
 	j = $427;
 	print( "R = " + string( R ) + "\n" );
-	print( "type of R is " + type( R ) + "\n" );
+	print( "type of R is " + string( type( R ) ) + "\n" );
 	q = ( a + m * math.square_root( n ) ) ^ $3;
 	print( "q = " + string( q ) + "\n" );
-	print( "type of q is " + type( q ) + "\n" );
+	print( "type of q is " + string( type( q ) ) + "\n" );
 	num = math.natural_logarithm( R ^ $3 * q + u );
 	den = math.square_root( j );
 	pi = num / den;
 	pi.set_precision( 52 );
 	print( "pi ~~ " + string( pi ) + "\n" );
-	print( "type of pi is " + type( pi ) + "\n" );
+	print( "type of pi is " + string( type( pi ) ) + "\n" );
 	return ( 0 );
 }
