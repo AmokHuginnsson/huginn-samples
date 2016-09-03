@@ -1,0 +1,58 @@
+#! /bin/sh
+exec huginn --no-argv -E "${0}" "${@}"
+#! huginn
+
+class ListNode {
+	_next = none;
+	_data = none;
+	constructor( data_, next_ ) {
+		_data = data_;
+		_next = next_;
+	}
+}
+
+class ListIterator {
+	_cur = none;
+	constructor( cur_ ) {
+		_cur = cur_;
+	}
+	is_valid() {
+		return ( _cur != none );
+	}
+	value() {
+		return ( _cur._data );
+	}
+	next() {
+		_cur = _cur._next;
+	}
+}
+
+class List {
+	_head = none;
+	add( data_ ) {
+		_head = ListNode( data_, _head );
+		return ( this );
+	}
+	get_size() {
+		node = _head;
+		i = 0;
+		while ( node != none ) {
+			node = node._next;
+			i += 1;
+		}
+		return ( i );
+	}
+	iterator() {
+		return ( ListIterator( _head ) );
+	}
+}
+
+main() {
+	l = List();
+	l.add( "one" ).add( "two" ).add( "three" );
+	print( "List size = " + string( size( l ) ) + "\n" );
+	print( "List items:\n" );
+	for ( e : l ) {
+		print( string( e ) + "\n" );
+	}
+}
