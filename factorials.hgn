@@ -1,0 +1,25 @@
+#! /bin/sh
+exec huginn -E "${0}" "${@}"
+#! huginn
+
+import Algorithms as algo;
+
+main( argv_ ) {
+	if ( size( argv_ ) < 2 ) {
+		print(
+			"Not enough arguments,"
+			" you have to specify a number\n"
+		);
+		return ( 1 );
+	}
+	n = integer( argv_[1] );
+	if ( n < 0 ) {
+		print( "you must specify non-negative number\n" );
+		return ( 2 );
+	}
+	for ( n : algo.range( 0, n + 1 ) ) {
+		print( "{}! = {}\n".format( n, number( n )! ) );
+	}
+	return ( 0 );
+}
+

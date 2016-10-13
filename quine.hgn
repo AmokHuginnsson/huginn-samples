@@ -1,0 +1,11 @@
+#! /bin/sh
+exec huginn --no-argv -E "${0}"
+#! huginn
+
+main() {
+	code = "#! /bin/sh\nexec huginn --no-argv -E \"${0}\"\n#! huginn\n\nmain() {\n\tcode = \"%\";\n\touter = copy( code );\n\tcode.replace( \"\\\\\", \"\\\\\\\\\" ).replace( \"\\n\", \"\\\\n\" ).replace( \"\\t\", \"\\\\t\" ).replace( \"\\\"\", \"\\\\\\\"\" );\n\touter.replace( string( code[81] ), code );\n\tprint( outer );\n}\n";
+	outer = copy( code );
+	code.replace( "\\", "\\\\" ).replace( "\n", "\\n" ).replace( "\t", "\\t" ).replace( "\"", "\\\"" );
+	outer.replace( string( code[81] ), code );
+	print( outer );
+}
