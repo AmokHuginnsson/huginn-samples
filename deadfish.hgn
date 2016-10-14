@@ -1,0 +1,36 @@
+#! /bin/sh
+exec huginn --no-argv -E "${0}" "${@}"
+#! huginn
+
+main() {
+	accumulator = 0;
+	print( ">> " );
+	while ( ( line = input() ) != none ) {
+		for ( c : line.strip() ) {
+			if ( ( accumulator == -1 ) || ( accumulator == 256 ) ) {
+				/* now, that's just a crazy talk */
+				accumulator = 0;
+			}
+			switch ( c ) {
+				case ( 'i' ): {
+					accumulator += 1;
+				} break;
+				case ( 'd' ): {
+					accumulator -= 1;
+				} break;
+				case ( 's' ): {
+					accumulator *= accumulator;
+				} break;
+				case ( 'o' ): {
+					print( "{}\n".format( accumulator ) );
+				} break;
+				default: {
+					print( "Unrecognized command.\n" );
+				}
+			}
+		}
+		print( ">> " );
+	}
+	return ( accumulator );
+}
+

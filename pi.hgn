@@ -1,0 +1,15 @@
+#! /bin/sh
+exec huginn -E "${0}" "${@}"
+#! huginn
+
+import Mathematics as math;
+
+main( argv_ ) {
+	if ( size( argv_ ) >= 2 ) {
+		prec = integer( argv_[1] );
+		print( "pi = {}\n".format( math.pi( number, prec ) ) );
+	} else {
+		print( "Not enough arguments to calculate power.\n" );
+	}
+	return ( 0 );
+}

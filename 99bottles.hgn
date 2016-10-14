@@ -5,7 +5,6 @@ exec huginn --no-argv -E "${0}" "${@}"
 import Algorithms as algo;
 
 main() {
-	print( "Hello World!\n" );
 	x = "{} bottle{} of beer on the wall,\n"
 		"{} bottle{} of beer.\n"
 		"Take one down, pass it around,\n"
