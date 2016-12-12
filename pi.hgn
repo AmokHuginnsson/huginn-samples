@@ -9,7 +9,8 @@ main( argv_ ) {
 		prec = integer( argv_[1] );
 		print( "pi = {}\n".format( math.pi( number, prec ) ) );
 	} else {
-		print( "Not enough arguments to calculate power.\n" );
+		print( "you must specify a positive number\n" );
 	}
 	return ( 0 );
 }
+
