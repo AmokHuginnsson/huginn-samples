@@ -1,0 +1,45 @@
+#! /bin/sh
+exec huginn -E "${0}" "${@}"
+#! huginn
+
+import Mathematics as math;
+import Algorithms as algo;
+
+solve( a, b, c ) {
+	Δ = b ^ $2 - $4 * a * c;
+	if ( Δ < $0 ) {
+		throw ArithmeticException( "Δ is negative." );
+	}
+	x1 = ( -b - math.square_root( Δ ) ) / ( $2 * a );
+	x2 = ( -b + math.square_root( Δ ) ) / ( $2 * a );
+	return ( [ x1, x2 ] );
+}
+
+main( argv_ ) {
+	argc = size( argv_ ) - 1;
+	if ( argc != 3 ) {
+		print( "Bad number of arguments, expected 3, got: {}\n".format( argc ) );
+		return ( 1 );
+	}
+	try {
+		a = number( argv_[1] );
+		b = number( argv_[2] );
+		c = number( argv_[3] );
+		res = solve( a, b, c );
+		res = algo.sorted( res );
+		print( "Equation solved for a = {}, b = {}, c = {}\n".format( a, b, c ) );
+		if ( res[0] != res[1] ) {
+			print( "result: x1 = {}, x2 = {}\n".format( res[0], res[1] ) );
+		} else {
+			print( "result: x0 = {}\n".format( res[0] ) );
+		}
+	} catch ( ConversionException e ) {
+		print( "A {} caught: {}\n".format( string( type( e ) ), e.message() ) );
+		return ( 2 );
+	} catch ( ArithmeticException e ) {
+		print( "An {} caught: {}\n".format( string( type( e ) ), e.message() ) );
+		return ( 3 );
+	}
+	return ( 0 );
+}
+
