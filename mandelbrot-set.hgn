@@ -6,8 +6,8 @@ import Algorithms as algo;
 import Mathematics as math;
 import OperatingSystem as os;
 
-invoke( cmd_, arg_ ) {
-	p = os.spawn( cmd_, arg_ );
+invoke( cmd_ ) {
+	p = os.spawn( cmd_... );
 	res = "";
 	out = p.out();
 	while ( ( line = out.read_line() ) != none ) {
@@ -63,8 +63,8 @@ main( argv_ ) {
 			lines = integer( envLines );
 			columns = integer( envColumns );
 		} else {
-			lines = integer( invoke( "/usr/bin/tput", "lines" ) ) - 1;
-			columns = integer( invoke( "/usr/bin/tput", "cols" ) ) - 1;
+			lines = integer( invoke( ( "/usr/bin/tput", "lines" ) ) ) - 1;
+			columns = integer( invoke( ( "/usr/bin/tput", "cols" ) ) ) - 1;
 		}
 	}
 	lines -= 1;
