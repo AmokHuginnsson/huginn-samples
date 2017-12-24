@@ -31,6 +31,6 @@ main( argv_ ) {
 		print( "you must specify non-negative number\n" );
 		return ( 2 );
 	}
-	print( "fib(" + argv_[1] + ") = " + string( fib( n ) ) + "\n" );
+	print( "fib({}) = {}\n".format( argv_[1], fib( n ) ) );
 	return ( 0 );
 }

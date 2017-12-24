@@ -12,12 +12,12 @@ main( argv_ ) {
 		}
 		if ( badWords.has_key( w ) ) {
 			print(
-				"I wholeheartedly reject " + w + ",\n"
-				"commie propaganda won't fly here, bye.\n"
+				"I wholeheartedly reject {},\n"
+				"commie propaganda won't fly here, bye.\n".format( w )
 			);
 			break;
 		}
-		print( "I can like this " + w + " thingy :)\n" );
+		print( "I can like this {} thingy :)\n".format( w ) );
 	}
 	return ( 0 );
 }

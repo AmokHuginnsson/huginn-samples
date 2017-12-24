@@ -5,15 +5,15 @@ exec huginn --no-argv -E "${0}" "${@}"
 main() {
 	s = "manhole cover";
 	print( s + "\n" );
-	print( "type of s is " + string( type( s ) ) + "\n" );
+	print( "type of s is {}\n".format( type( s ) ) );
 	s.replace( "hole co", "ou" );
 	print( s + "\n" );
 	s.to_upper();
 	print( s + "\n" );
-	print( "VER at " + string( s.find( "VER" ) ) + "\n" );
+	print( "VER at {}\n".format( s.find( "VER" ) ) );
 	print( ( s = s[1::2].to_lower() ) + "\n" );
 	print( s.strip( "ar" ) + "\n" );
 	s.clear();
-	print( "[" + s + "]\n" );
+	print( "[{}]\n".format( s ) );
 	return ( 0 );
 }

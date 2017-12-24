@@ -6,7 +6,7 @@ main() {
 	print( "Select number to describe: " );
 	rawSel = input().strip();
 	sel = integer( rawSel );
-	print( "You selected `" + rawSel + "' to describe.\n" );
+	print( "You selected `{}' to describe.\n".format( rawSel ) );
 	switch ( sel ) {
 		case ( 0 ): {
 			print(
@@ -23,7 +23,7 @@ main() {
 		case ( 2 ): {} /* fall through */
 		case ( 3 ): {} /* fall through */
 		case ( 4 ): {
-			print( "`" + rawSel + "' is less than 5.\n" );
+			print( "`{}' is less than 5.\n".format( rawSel ) );
 		} break;
 		case ( 7 ): {
 			print( "`Seven' is considered lucky number by some.\n" );

@@ -8,16 +8,16 @@ is( x ) {
 
 main() {
 	c = 'f';
-	print( "type of c is " + string( type( c ) ) + "\n" );
-	print( "value of c is " + string( c ) + "\n" );
-	print( "c is " + ( c.is_upper() ? "upper" : "lower" ) + "case character\n" );
+	print( "type of c is {}\n".format( type( c ) ) );
+	print( "value of c is {}\n".format( c ) );
+	print( "c is {}case character\n".format( c.is_upper() ? "upper" : "lower" ) );
 	c.to_upper();
-	print( "now value of c is " + string( c ) + "\n" );
+	print( "now value of c is {}\n".format( c ) );
 	s = "Hello";
-	print( "type of s[0] is " + string( type( s[0] ) ) + "\n" );
-	print( "value of s[0] is " + string( s[0] ) + "\n" );
-	print( "s[0] is " + ( ! s[0].is_lower() ? "upper" : "lower" ) + "case character\n" );
-	print( "c " + is( c.is_xdigit() ) + " hexadecimal\n" );
-	print( "s[0] " + is( s[0].is_xdigit() ) + " hexadecimal\n" );
+	print( "type of s[0] is {}\n".format( type( s[0] ) ) );
+	print( "value of s[0] is {}\n".format( s[0] ) );
+	print( "s[0] is {}case character\n".format( ! s[0].is_lower() ? "upper" : "lower" ) );
+	print( "c {} hexadecimal\n".format( is( c.is_xdigit() ) ) );
+	print( "s[0] {} hexadecimal\n".format( is( s[0].is_xdigit() ) ) );
 	return ( 0 );
 }

@@ -3,13 +3,14 @@ exec huginn --no-argv -E "${0}" "${@}"
 #! huginn
 
 main() {
-	while ( size( line = input().strip() ) > 0 ) {
+	while ( ( line = input() ) != none ) {
+		line = line.strip();
 		x = integer( line );
 		if ( x > 10 ) {
-			print( line + " is too much for me :(\n" );
+			print( "{} is too much for me :(\n".format( line ) );
 			break;
 		}
-		print( line + " squared is " + string( x * x ) + "\n" );
+		print( "{} squared is {}\n".format( line, x * x ) );
 	}
 	return ( 0 );
 }

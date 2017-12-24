@@ -6,7 +6,7 @@ main( argv_ ) {
 	if ( size( argv_ ) > 2 ) {
 		print( "script got at least two arguments\n" );
 	} else if ( size( argv_ ) > 1 ) {
-		print( "script got an argument: " + argv_[1] + "\n" );
+		print( "script got an argument: {}\n".format( argv_[1] ) );
 	} else {
 		print( "script aint got any argument\n" );
 	}

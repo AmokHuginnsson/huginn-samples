@@ -11,16 +11,16 @@ main() {
 	n = $61;
 	u = $744;
 	j = $427;
-	print( "R = " + string( R ) + "\n" );
-	print( "type of R is " + string( type( R ) ) + "\n" );
+	print( "R = {}\n".format( R ) );
+	print( "type of R is {}\n".format( type( R ) ) );
 	q = ( a + m * math.square_root( n ) ) ^ $3;
-	print( "q = " + string( q ) + "\n" );
-	print( "type of q is " + string( type( q ) ) + "\n" );
+	print( "q = {}\n".format( q ) );
+	print( "type of q is {}\n".format( type( q ) ) );
 	num = math.natural_logarithm( R ^ $3 * q + u );
 	den = math.square_root( j );
 	pi = num / den;
 	pi.set_precision( 52 );
-	print( "pi ~~ " + string( pi ) + "\n" );
-	print( "type of pi is " + string( type( pi ) ) + "\n" );
+	print( "pi ~~ {}\n".format( pi ) );
+	print( "type of pi is {}\n".format( type( pi ) ) );
 	return ( 0 );
 }

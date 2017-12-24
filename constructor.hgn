@@ -13,6 +13,6 @@ class Point {
 
 main() {
 	p = Point( 1, 2 );
-	print( "p = (" + string( p._x ) + "," + string( p._y ) + ")\n" );
+	print( "p = ({},{})\n".format( p._x, p._y ) );
 	return ( 0 );
 }

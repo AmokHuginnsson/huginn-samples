@@ -4,7 +4,7 @@ exec huginn -E "${0}" "${@}"
 
 main( argv_ ) {
 	if ( size( argv_ ) > 1 ) {
-		print( "Hello " + argv_[1] + "!\n" );
+		print( "Hello {}!\n".format( argv_[1] ) );
 	} else {
 		print( "Hello World!\n" );
 	}

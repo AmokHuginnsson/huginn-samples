@@ -7,16 +7,16 @@ main() {
 	y = 333;
 	p = 7;
 	q = 16;
-	print( "x = " + string( x ) + "\n" );
-	print( "type of x is " + string( type( x ) ) + "\n" );
+	print( "x = {}\n".format( x ) );
+	print( "type of x is {}\n".format( type( x ) ) );
 	n = x + y;
-	print( "n = " + string( n ) + "\n" );
-	print( "type of n is " + string( type( n ) ) + "\n" );
+	print( "n = {}\n".format( n ) );
+	print( "type of n is {}\n".format( type( n ) ) );
 	d = p * q;
 	d += 1;
-	print( "d = " + string( d ) + "\n" );
-	print( "type of d is " + string( type( d ) ) + "\n" );
-	print( "pi ~~ " + string( x / p ) + "\n" );
-	print( "... or pi ~~ " + string( n / d ) + "\n" );
+	print( "d = {}\n".format( d ) );
+	print( "type of d is {}\n".format( type( d ) ) );
+	print( "pi ~~ {}\n".format( x / p ) );
+	print( "... or pi ~~ {}\n".format( n / d ) );
 	return ( 0 );
 }

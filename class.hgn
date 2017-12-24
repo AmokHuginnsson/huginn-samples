@@ -11,6 +11,6 @@ main() {
 	p = Point();
 	p._x = 1;
 	p._y = 2;
-	print( "p = (" + string( p._x ) + "," + string( p._y ) + ")\n" );
+	print( "p = ({},{})\n".format( p._x, p._y ) );
 	return ( 0 );
 }

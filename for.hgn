@@ -4,7 +4,7 @@ exec huginn -E "${0}" "${@}"
 
 main( argv_ ) {
 	for ( arg : argv_ ) {
-		print( "arg = " + arg + "\n" );
+		print( "arg = {}\n".format( arg ) );
 	}
 	return ( 0 );
 }
