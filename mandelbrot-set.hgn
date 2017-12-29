@@ -10,7 +10,7 @@ mandelbrot( x, y ) {
 	c = math.Complex( x, y );
 	z = math.Complex( 0., 0. );
 	s = -1;
-	for ( i : algo.range( 10 ) ) {
+	for ( i : algo.range( 50 ) ) {
 		z = z * z + c;
 		if ( | z | > 2. ) {
 			s = i;
@@ -24,12 +24,12 @@ main( argv_ ) {
 	imgSize = term_size( argv_ );
 	yRad = 1.2;
 	yScale = 2. * yRad / real( imgSize[0] );
-	xScale = 3. / real( imgSize[1] );
-	glyphTab = [ ".", "-", "-", "+", "*", "*", "%", "%", "%", "@", "@", " " ];
+	xScale = 3.3 / real( imgSize[1] );
+	glyphTab = [ ".", ":", "-", "+", "+" ].resize( 12, "*" ).resize( 26, "%" ).resize( 50, "@" ).push( " " );
 	for ( y : algo.range( imgSize[0] ) ) {
 		line = "";
 		for ( x : algo.range( imgSize[1] ) ) {
-			line += glyphTab[ mandelbrot( xScale * real( x ) - 2.1, yScale * real( y ) - yRad ) ];
+			line += glyphTab[ mandelbrot( xScale * real( x ) - 2.3, yScale * real( y ) - yRad ) ];
 		}
 		print( line + "\n" );
 	}
