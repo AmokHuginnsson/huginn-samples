@@ -6,16 +6,6 @@ import Algorithms as algo;
 import Mathematics as math;
 import OperatingSystem as os;
 
-invoke( cmd_ ) {
-	p = os.spawn( cmd_... );
-	res = "";
-	out = p.out();
-	while ( ( line = out.read_line() ) != none ) {
-		res += line;
-	}
-	return ( res );
-}
-
 mandelbrot( x, y ) {
 	c = math.Complex( x, y );
 	z = math.Complex( 0., 0. );
@@ -30,27 +20,23 @@ mandelbrot( x, y ) {
 	return ( s );
 }
 
-glyph( c ) {
-	g = ' ';
-	if ( c > 3 ) {
-		if ( c > 8 ) {
-			g = '@';
-		} else if ( c > 5 ) {
-			g = '%';
-		} else {
-			g = '*';
+main( argv_ ) {
+	imgSize = term_size( argv_ );
+	yRad = 1.2;
+	yScale = 2. * yRad / real( imgSize[0] );
+	xScale = 3. / real( imgSize[1] );
+	glyphTab = [ ".", "-", "-", "+", "*", "*", "%", "%", "%", "@", "@", " " ];
+	for ( y : algo.range( imgSize[0] ) ) {
+		line = "";
+		for ( x : algo.range( imgSize[1] ) ) {
+			line += glyphTab[ mandelbrot( xScale * real( x ) - 2.1, yScale * real( y ) - yRad ) ];
 		}
-	} else if ( c > 2 ) {
-		g = '+';
-	} else if ( c > 0 ) {
-		g = '-';
-	} else if ( c > -1 ) {
-		g = '.';
+		print( line + "\n" );
 	}
-	return ( g );
+	return ( 0 );
 }
 
-main( argv_ ) {
+term_size( argv_ ) {
 	lines = 25;
 	columns = 80;
 	if ( size( argv_ ) == 3 ) {
@@ -69,16 +55,16 @@ main( argv_ ) {
 	}
 	lines -= 1;
 	columns -= 1;
-	yRad = 1.2;
-	yScale = 2. * yRad / real( lines );
-	xScale = 3. / real( columns );
-	for ( y : algo.range( lines ) ) {
-		line = "";
-		for ( x : algo.range( columns ) ) {
-			line += string( glyph( mandelbrot( xScale * real( x ) - 2.1, yScale * real( y ) - yRad ) ) );
-		}
-		print( line + "\n" );
+	return ( ( lines, columns ) );
+}
+
+invoke( cmd_ ) {
+	p = os.spawn( cmd_... );
+	res = "";
+	out = p.out();
+	while ( ( line = out.read_line() ) != none ) {
+		res += line;
 	}
-	return ( 0 );
+	return ( res );
 }
 
