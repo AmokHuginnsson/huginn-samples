@@ -1,0 +1,22 @@
+#! /bin/sh
+exec huginn -E --no-argv "${0}" "${@}"
+#! huginn
+
+import Algorithms as algo;
+import Text as text;
+
+main() {
+	hist = {};
+	while ( ( line = input() ) != none ) {
+		for ( w : text.split( line.strip().to_lower(), " " ) ) {
+			v = hist.ensure( w, 0 );
+			v += 1;
+		}
+	}
+	hist = algo.sorted( hist.values(), @(_){ -_[1]; } );
+	for ( h : hist ) {
+		print( "{:6d} {}\n".format( h[1], h[0] ) );
+	}
+	return ( 0 );
+}
+
