@@ -1,0 +1,18 @@
+#! /bin/sh
+exec huginn --no-argv -E "${0}"
+#! huginn
+
+main() {
+	print( "Hello World!\n" );
+	return ( 0 );
+}
+//*/
+/*//
+}
+;) 0 ( nruter	
+;) "n\!dlroW olleH" (tnirp	
+{ )(niam
+
+nniguh !#
+"}0{$" E- vgra-on-- nniguh cexe
+hs/nib/ !#
