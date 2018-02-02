@@ -1,0 +1,275 @@
+#! /bin/sh
+exec huginn -E "${0}" "${@}"
+#! huginn
+
+import Algorithms as algo;
+import Mathematics as math;
+import Text as text;
+import FileSystem as fs;
+
+class Env {
+	_data = {};
+	_outer = none;
+	constructor( params_ = (), args_ = (), outer_ = none ) {
+		for ( i : algo.range( algo.min( size( params_ ), size( args_ ) ) ) ) {
+			_data[params_[i]] = args_[i];
+		}
+		_outer = outer_;
+	}
+	update( dct_ ) {
+		_data.update( dct_ );
+	}
+	set_kv( k, v ) {
+		_data[k] = v;
+	}
+	find( var_ ) {
+		return (
+			_data.has_key( var_ )
+				? _data
+				: _outer.find( var_ )
+		);
+	}
+}
+
+cc( x, y ) {
+	tx = type( x );
+	if ( tx == boolean ) {
+		x = x ? 1 : 0;
+		tx = integer;
+	}
+	ty = type( y );
+	return ( ( ty == real ) && ( tx == integer ) ? real( x ) : x );
+}
+
+standard_env() {
+	env = Env();
+	bc = type( @[env](){} );
+	env.update( {
+		"+":          @( x, y ){ cc( x, y ) + cc( y, x ); },
+		"-":          @( x, y ){ cc( x, y ) - cc( y, x ); },
+		"*":          @( x, y ){ cc( x, y ) * cc( y, x ); },
+		"/":          @( x, y ){ cc( x, y ) / cc( y, x ); },
+		">":          @( x, y ){ cc( x, y ) > cc( y, x ); },
+		"<":          @( x, y ){ cc( x, y ) < cc( y, x ); },
+		">=":         @( x, y ){ cc( x, y ) >= cc( y, x ); },
+		"<=":         @( x, y ){ cc( x, y ) <= cc( y, x ); },
+		"=":          @( x, y ){ cc( x, y ) == cc( y, x ); },
+		"pow":        @( x, y ){ real( x ) ^ real( y ); },
+		"abs":        @( x )   { | x |; },
+		"append":     @( x, y ){ cc( x, y ) + cc( y, x ); },
+		"apply":      @( x, y ){ x( y... ); },
+		"begin":      @( x... ){ x[-1]; },
+		"car":        @( x )   { x[0]; },
+		"cdr":        @( x )   { x[1:]; },
+		"cons":       @( x, y ){ [x] + y; },
+		"eq?":        @( x, y ){ cc( x, y ) == cc( y, x ); },
+		"equal?":     @( x, y ){ cc( x, y ) == cc( y, x ); },
+		"length":     @( x )   { size( x ); },
+		"list":       @( x... ){ algo.materialize( x, list ); },
+		"list?":      @( x )   { type( x ) == list; },
+		"map":        @( x, y ){ algo.materialize( algo.map( y, x ), list ); },
+		"max":        algo.max,
+		"min":        algo.min,
+		"not":        @( x )   { !x; },
+		"null?":      @( x )   { x == []; },
+		"number?":    @( x )   { t = type( x ); ( t == real ) || ( t == integer ); },
+		"procedure?": @[bc]( x ) { type( x ) == bc; },
+		"round":      @( x )   { type( x ) == real ? math.round( x ) : x; },
+		"symbol?":    @( x )   { type( x ) == string; },
+		"sqrt":       @( x )   { math.square_root( real( x ) ); },
+		"sin":        @( x )   { math.sinus( real( x ) ); },
+		"cos":        @( x )   { math.cosinus( real( x ) ); },
+		"pi":         math.pi( real ),
+		"π":          math.pi( real )
+	} );
+	return ( env );
+}
+
+to_bool( v ) {
+	switch ( type( v ) ) {
+		case ( integer ): {
+			return ( v != 0 );
+		}
+		case ( list ): {}
+		case ( string ): {
+			return ( size( v ) > 0 );
+		}
+	}
+	return ( v );
+}
+
+eval( x, env ) {
+	if ( type( x ) == string ) {
+		return ( env.find( x )[x] );
+	} else if ( type( x ) != list ) {
+		return ( x );
+	}
+	h = x[0];
+	his = type( h ) == string;
+	if ( his ) {
+		switch ( h ) {
+			case ( "quote" ): {
+				return ( x[1] );
+			}
+			case ( "if" ): {
+				test = x[1];
+				conseq = x[2];
+				alt = x[3];
+				exp = to_bool( eval( test, env ) ) ? conseq : alt;
+				return ( eval( exp, env ) );
+			}
+			case ( "lambda" ): {
+				return (
+					@[_params: x[1], _body: x[2], _env: env] ( args_... ) {
+						eval( _body, Env( _params, args_, _env ) );
+					}
+				);
+			}
+			case ( "define" ): {
+				env.set_kv( x[1], eval( x[2], env ) );
+				return ( none );
+			}
+			case ( "set!" ): {
+				env.find( x[1] )[ x[1] ] = eval( x[2], env );
+				return ( none );
+			}
+		}
+	}
+	proc = eval( h, env );
+	args = algo.materialize( algo.map( x[1:], @[env]( _ ){ eval( _, env ); } ), tuple );
+	return ( proc( args... ) );
+}
+
+atom( token ) {
+	a = token;
+	try {
+		return ( token.find( "." ) >= 0 ? real( token ) : integer( token ) );
+	} catch ( Exception e ) {
+	}
+	return ( a );
+}
+
+parse( tokens ) {
+	if ( size( tokens ) == 0 ) {
+		throw Exception( "unexpected EOF" );
+	}
+	token = tokens[0];
+	tokens.pop_front();
+	if ( token == "(" ) {
+		exprs = [];
+		while ( tokens[0] != ")" ) {
+			exprs.push( parse( tokens ) );
+		}
+		tokens.pop_front();
+		return ( exprs );
+	}	else if ( token == ")" ) {
+		throw Exception( "unexpected )" );
+	} else {
+		return ( atom( token ) );
+	}
+}
+
+is_quoted( token_ ) {
+	isQuoted = false;
+	l = size( token_ );
+	if ( l >= 2 ) {
+		h = token_[0];
+		isQuoted = ( h == token_[-1] ) && ( ( h == '"' ) || ( h == '\'' ) );
+	}
+	return ( isQuoted );
+}
+
+split_quotes( str_ ) {
+	tokens = deque();
+	singleQuoteCount = 0;
+	doubleQuoteCount = 0;
+	escaped = false;
+	token = "";
+	white = " \t\r\n\v\f\a\b";
+	for ( c : str_ ) {
+		if ( escaped ) {
+			token += string( c );
+			escaped = false;
+			continue;
+		}
+		paren = ( c == '(' ) || ( c == ')' );
+		if ( ( white.find( string( c ) ) >= 0 ) || paren ) {
+			inQuotes = ( ( doubleQuoteCount % 2 ) != 0 ) || ( ( singleQuoteCount % 2 ) != 0 );
+			if ( ! inQuotes ) {
+				if ( size( token ) != 0 ) {
+					t = copy( token ).replace( "\\ ", " " ).replace( "\\\t", "\t" );
+					comented = false;
+					if ( ! is_quoted( t ) ) {
+						comentPos = t.find( ";" );
+						if ( comentPos >= 0 ) {
+							t = t[:comentPos];
+							comented = true;
+						}
+					}
+					if ( size( t ) > 0 ) {
+						tokens.push( t );
+					}
+					token.clear();
+					if ( comented ) {
+						break;
+					}
+				}
+				if ( paren ) {
+					tokens.push( string( c ) );
+				}
+				continue;
+			}
+		}
+		token += string( c );
+		if ( c == '\\' ) {
+			escaped = true;
+		} else if ( ( c == '"' ) && ( ( singleQuoteCount % 2 ) == 0 ) ) {
+			doubleQuoteCount += 1;
+		} else if ( ( c == '\'' ) && ( ( doubleQuoteCount % 2 ) == 0 ) ) {
+			singleQuoteCount += 1;
+		}
+	}
+	if ( size( token ) != 0 ) {
+		tokens.push( token.replace( "\\ ", " " ).replace( "\\\t", "\t" ) );
+	}
+	if ( ( ( doubleQuoteCount % 2 ) != 0 ) || ( ( singleQuoteCount % 2 ) != 0 ) ) {
+		throw Exception( "Unterminated quotes" );
+	}
+	return ( tokens );
+}
+
+interpret( lineFeed, env ) {
+	while ( ( line = lineFeed() ) != none ) {
+		t = split_quotes( line );
+		if ( size( t ) == 0 ) {
+			continue;
+		}
+		e = parse( t );
+		/* print( "{}\n".format( e ) ); */
+		r = eval( e, env );
+		if ( r != none ) {
+			print( "{}\n".format( scm_to_string( r ) ) );
+		}
+	}
+}
+
+scm_to_string( e ) {
+	if ( type( e ) == list ) {
+		e = "({})".format( text.join( algo.materialize( algo.map( e, string ), list ), " " ) );
+	}
+	return ( e );
+}
+
+main( argv_ ) {
+	env = standard_env();
+	if ( size( argv_ ) > 1 ) {
+		for ( a : argv_[1:] ) {
+			f = fs.open( a, fs.reading() );
+			interpret( @[f](){ f.read_line(); }, env );
+		}
+	} else {
+		interpret( input, env );
+	}
+	return ( 0 );
+}
+
