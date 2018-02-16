@@ -4,14 +4,14 @@ exec huginn -E "${0}" "${@}"
 
 /* First Huginn programme. */
 
+import Algorithms as algo;
+
 main( argv_ ) {
 	print( "Hello World!\n" );
 	argc = size( argv_ );
 	print( "number of arguments: {}\n".format( argc ) );
-	i = 0;
-	while ( i < argc ) {
-		print( "argv_[{}]: {}\n".format( i, argv_[i] ) );
-		i += 1;
+	for ( i, arg : algo.enumerate( argv_ ) ) {
+		print( "argv_[{}]: {}\n".format( i, arg ) );
 	}
 	if ( argc >= 3 ) {
 		base = number( argv_[1] );
