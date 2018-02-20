@@ -5,14 +5,10 @@ exec huginn -E "${0}" "${@}"
 import Algorithms as algo;
 
 fib( n_ ) {
-	x = 1;
 	a = number( 0 );
 	b = number( 1 );
-	while ( x < n_ ) {
-		t = a;
-		a = copy( b );
-		b += t;
-		x += 1;
+	for ( _ : algo.range( algo.max( n_ - 1, 0 ) ) ) {
+		a, b = ( b, a + b );
 	}
 	if ( n_ == 0 ) {
 		b = 0;
