@@ -2,22 +2,31 @@
 exec huginn --no-argv -E "${0}" "${@}"
 #! huginn
 
-rot13( s ) {
-	r = "";
-	for ( c : s ) {
-		if ( c.is_alpha() ) {
-			x = integer( c );
-			m = integer( c.is_upper() ? 'A' : 'a' );
-			x -= m;
-			x += 13;
-			x %= 26;
-			x += m;
-			r += string( character( x ) );
-		} else {
-			r += string( c );
-		}
+import Algorithms as algo;
+
+rot13char( c ) {
+	if ( c.is_alpha() ) {
+		x = integer( c );
+		m = integer( c.is_upper() ? 'A' : 'a' );
+		x -= m;
+		x += 13;
+		x %= 26;
+		x += m;
+		c = character( x );
 	}
-	return ( r );
+	return ( c );
+}
+
+rot13( s ) {
+	return (
+		algo.reduce(
+			algo.map(
+				algo.map( s, rot13char ),
+				string
+			),
+			@( r, c ) { r + c; }
+		)
+	);
 }
 
 main() {
