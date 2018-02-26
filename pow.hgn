@@ -2,7 +2,7 @@
 exec huginn -E "${0}" "${@}"
 #! huginn
 
-/* First Huginn programme. */
+/* First Huginn program. */
 
 import Algorithms as algo;
 
