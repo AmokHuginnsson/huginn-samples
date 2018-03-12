@@ -264,7 +264,7 @@ main( argv_ ) {
 	env = standard_env();
 	if ( size( argv_ ) > 1 ) {
 		for ( a : argv_[1:] ) {
-			f = fs.open( a, fs.reading() );
+			f = fs.open( a, fs.OPEN_MODE.READ );
 			interpret( @[f](){ f.read_line(); }, env );
 		}
 	} else {
