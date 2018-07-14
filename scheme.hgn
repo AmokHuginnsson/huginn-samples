@@ -23,11 +23,7 @@ class Env {
 		_data[k] = v;
 	}
 	find( var_ ) {
-		return (
-			_data.has_key( var_ )
-				? _data
-				: _outer.find( var_ )
-		);
+		return ( var_ ∈ _data ? _data : _outer.find( var_ ) );
 	}
 }
 

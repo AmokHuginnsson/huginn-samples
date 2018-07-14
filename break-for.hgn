@@ -10,7 +10,7 @@ main( argv_ ) {
 			skipOnce = false;
 			continue;
 		}
-		if ( badWords.has_key( w ) ) {
+		if ( w ∈ badWords ) {
 			print(
 				"I wholeheartedly reject {},\n"
 				"commie propaganda won't fly here, bye.\n".format( w )
