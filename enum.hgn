@@ -1,0 +1,15 @@
+#! /bin/sh
+exec huginn --no-argv -E "${0}" "${@}"
+#! huginn
+
+enum COLOR {
+	RED,
+	GREEN,
+	BLUE
+}
+
+main() {
+	e = COLOR.RED;
+	print( "{}\n".format( e ) );
+	return ( 0 );
+}
