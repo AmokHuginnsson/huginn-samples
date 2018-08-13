@@ -1,0 +1,59 @@
+#! /bin/sh
+exec huginn -E "${0}" "${@}"
+#! huginn
+
+import Algorithms as algo;
+
+class RollingHash {
+	MOD = integer( $2 ^ $61 ) - 1;
+	BASE = 101;
+	_specific = none;
+	_hash = 0;
+	constructor( str_ ) {
+		_specific = specific( size( str_ ) );
+		for ( c : str_ ) {
+			push( c );
+		}
+	}
+	specific( len_ ) {
+		p = 1;
+		for ( _ : algo.range( 1, len_ ) ) {
+			p *= BASE;
+			p %= MOD;
+		}
+		return ( p );
+	}
+	push( in_ ) {
+		_hash *= BASE;
+		_hash += integer( in_ );
+		_hash %= MOD;
+	}
+	move( in_, out_ ) {
+		p = _specific * integer( out_ );
+		p %= MOD;
+		_hash -= p;
+		_hash += MOD;
+		_hash %= MOD;
+		push( in_ );
+	}
+	hash() {
+		return ( _hash );
+	}
+}
+
+main( argv_ ) {
+	if ( size( argv_ ) != 3 ) {
+		return ( 1 );
+	}
+	s = argv_[2];
+	rhKey = RollingHash( argv_[1] );
+	keyLen = size( argv_[1] );
+	rh = RollingHash( s[:keyLen] );
+	print( "{:x}\n".format( rhKey.hash() ) );
+	for ( i : algo.range( size( s ) - keyLen ) ) {
+		print( "rh[{:2d}] = {:#010x}{}\n".format( i, rh.hash(), rh.hash() == rhKey.hash() ? "*" : "" ) );
+		rh.move( s[i + keyLen], s[i] );
+	}
+	return ( 0 );
+}
+
