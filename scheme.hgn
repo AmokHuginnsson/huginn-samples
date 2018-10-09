@@ -4,6 +4,7 @@ exec huginn -E "${0}" "${@}"
 
 import Algorithms as algo;
 import Mathematics as math;
+import Operators as op;
 import Text as text;
 import FileSystem as fs;
 
@@ -40,6 +41,7 @@ cc( x, y ) {
 standard_env() {
 	env = Env();
 	bc = type( @[env](){} );
+	fr = type( type );
 	env.update( {
 		"+":          @( x, y ){ cc( x, y ) + cc( y, x ); },
 		"-":          @( x, y ){ cc( x, y ) - cc( y, x ); },
@@ -51,7 +53,7 @@ standard_env() {
 		"<=":         @( x, y ){ cc( x, y ) <= cc( y, x ); },
 		"=":          @( x, y ){ cc( x, y ) == cc( y, x ); },
 		"pow":        @( x, y ){ real( x ) ^ real( y ); },
-		"abs":        @( x )   { | x |; },
+		"abs":        op.modulus,
 		"append":     @( x, y ){ cc( x, y ) + cc( y, x ); },
 		"apply":      @( x, y ){ x( y... ); },
 		"begin":      @( x... ){ x[-1]; },
@@ -66,10 +68,10 @@ standard_env() {
 		"map":        @( x, y ){ algo.materialize( algo.map( y, x ), list ); },
 		"max":        algo.max,
 		"min":        algo.min,
-		"not":        @( x )   { !x; },
+		"not":        op.not,
 		"null?":      @( x )   { x == []; },
 		"number?":    @( x )   { t = type( x ); ( t == real ) || ( t == integer ); },
-		"procedure?": @[bc]( x ) { type( x ) == bc; },
+		"procedure?": @[bc, fr]( x ) { t = type( x ); t == bc || t == fr; },
 		"round":      @( x )   { type( x ) == real ? math.round( x ) : x; },
 		"symbol?":    @( x )   { type( x ) == string; },
 		"sqrt":       @( x )   { math.square_root( real( x ) ); },

@@ -3,41 +3,77 @@ exec huginn -E "${0}" "${@}"
 #! huginn
 
 import Algorithms as algo;
+import Text as text;
+
+enum DIRECTION {
+	LEFT,
+	RIGHT
+}
+
+mulmod( a_, b_, mod_ ) {
+	r = 0;
+	b_ = b_ % mod_;
+	a_ = a_ % mod_;
+	while ( b_ > 0 ) {
+		if ( ( b_ % 2 ) == 1 ) {
+			r += a_;
+			r %= mod_;
+		}
+		a_ *= 2;
+		a_ %= mod_;
+		b_ /= 2;
+	}
+	return ( r );
+}
 
 class RollingHash {
-	MOD = integer( $2 ^ $61 ) - 1;
+	MOD = integer( $2 ^ $55 ) - 55;
 	BASE = 101;
-	_specific = none;
+	_specific = 1;
+	_len = 0;
 	_hash = 0;
 	constructor( str_ ) {
-		_specific = specific( size( str_ ) );
+		assert( type( str_ ) == string );
 		for ( c : str_ ) {
+			if ( _len > 0 ) {
+				_specific = ( _specific * BASE ) % MOD;
+			}
 			push( c );
+			_len += 1;
 		}
-	}
-	specific( len_ ) {
-		p = 1;
-		for ( _ : algo.range( 1, len_ ) ) {
-			p *= BASE;
-			p %= MOD;
-		}
-		return ( p );
 	}
 	push( in_ ) {
 		_hash *= BASE;
 		_hash += integer( in_ );
 		_hash %= MOD;
 	}
-	move( in_, out_ ) {
-		p = _specific * integer( out_ );
-		p %= MOD;
+	pop( out_ ) {
+		p = mulmod( _specific, integer( out_ ), MOD );
 		_hash -= p;
 		_hash += MOD;
 		_hash %= MOD;
+	}
+	move( in_, out_ ) {
+		assert( type( in_ ) == character );
+		assert( type( out_ ) == character );
+		pop( out_ );
 		push( in_ );
 	}
 	hash() {
 		return ( _hash );
+	}
+	len() {
+		return ( _len );
+	}
+}
+
+test( s, rhKey, rh, i ) {
+	if ( rh.hash() == rhKey.hash() ) {
+		print(
+			"{}\n{}{}\n".format(
+				s, text.repeat( " ", i ), text.repeat( "^", rhKey.len() )
+			)
+		);
 	}
 }
 
@@ -45,14 +81,32 @@ main( argv_ ) {
 	if ( size( argv_ ) != 3 ) {
 		return ( 1 );
 	}
+
 	s = argv_[2];
-	rhKey = RollingHash( argv_[1] );
 	keyLen = size( argv_[1] );
+
+	rhKey = RollingHash( argv_[1] );
 	rh = RollingHash( s[:keyLen] );
+
 	print( "{:x}\n".format( rhKey.hash() ) );
+	print( "MOD = {:x}, BASE = {:x}\n\n".format( rh.MOD, rh.BASE ) );
+
+	print( "FORWARD >>>\n\n" );
+	test( s, rhKey, rh, 0 );
 	for ( i : algo.range( size( s ) - keyLen ) ) {
-		print( "rh[{:2d}] = {:#010x}{}\n".format( i, rh.hash(), rh.hash() == rhKey.hash() ? "*" : "" ) );
 		rh.move( s[i + keyLen], s[i] );
+		test( s, rhKey, rh, i + 1 );
+	}
+
+	rhKey = RollingHash( argv_[1][::-1] );
+	rh = RollingHash( s[:-keyLen - 1:-1] );
+
+	print( "\nBACKWARD <<<\n\n" );
+	start = size( s ) - keyLen;
+	test( s, rhKey, rh, start );
+	for ( i : algo.range( start - 1, -1, -1 ) ) {
+		rh.move( s[i], s[i + keyLen] );
+		test( s, rhKey, rh, i );
 	}
 	return ( 0 );
 }
