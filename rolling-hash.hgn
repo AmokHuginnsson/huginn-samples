@@ -2,6 +2,7 @@
 exec huginn -E "${0}" "${@}"
 #! huginn
 
+import Mathematics as math;
 import Algorithms as algo;
 import Text as text;
 
@@ -10,54 +11,52 @@ enum DIRECTION {
 	RIGHT
 }
 
-mulmod( a_, b_, mod_ ) {
-	r = 0;
-	b_ = b_ % mod_;
-	a_ = a_ % mod_;
-	while ( b_ > 0 ) {
-		if ( ( b_ % 2 ) == 1 ) {
-			r += a_;
-			r %= mod_;
-		}
-		a_ *= 2;
-		a_ %= mod_;
-		b_ /= 2;
-	}
-	return ( r );
-}
-
 class RollingHash {
 	MOD = integer( $2 ^ $55 ) - 55;
 	BASE = 101;
+	INVERSE = 0;
 	_specific = 1;
 	_len = 0;
 	_hash = 0;
 	constructor( str_ ) {
 		assert( type( str_ ) == string );
+		INVERSE = math.modular_multiplicative_inverse( MOD, BASE );
 		for ( c : str_ ) {
 			if ( _len > 0 ) {
 				_specific = ( _specific * BASE ) % MOD;
 			}
-			push( c );
+			push( c, DIRECTION.RIGHT );
 			_len += 1;
 		}
 	}
-	push( in_ ) {
-		_hash *= BASE;
-		_hash += integer( in_ );
+	push( in_, direction_ ) {
+		if ( direction_ == DIRECTION.RIGHT ) {
+			_hash *= BASE;
+			_hash += integer( in_ );
+		} else {
+			p = math.modular_multiplication( _specific, integer( in_ ), MOD );
+			_hash += p;
+		}
 		_hash %= MOD;
 	}
-	pop( out_ ) {
-		p = mulmod( _specific, integer( out_ ), MOD );
-		_hash -= p;
-		_hash += MOD;
-		_hash %= MOD;
+	pop( out_, direction_ ) {
+		if ( direction_ == DIRECTION.RIGHT ) {
+			p = math.modular_multiplication( _specific, integer( out_ ), MOD );
+			_hash -= p;
+			_hash += MOD;
+			_hash %= MOD;
+		} else {
+			_hash -= integer( out_ );
+			_hash += MOD;
+			_hash %= MOD;
+			_hash = math.modular_multiplication( _hash, INVERSE, MOD );
+		}
 	}
-	move( in_, out_ ) {
+	move( in_, out_, direction_ ) {
 		assert( type( in_ ) == character );
 		assert( type( out_ ) == character );
-		pop( out_ );
-		push( in_ );
+		pop( out_, direction_ );
+		push( in_, direction_ );
 	}
 	hash() {
 		return ( _hash );
@@ -86,26 +85,25 @@ main( argv_ ) {
 	keyLen = size( argv_[1] );
 
 	rhKey = RollingHash( argv_[1] );
-	rh = RollingHash( s[:keyLen] );
-
 	print( "{:x}\n".format( rhKey.hash() ) );
-	print( "MOD = {:x}, BASE = {:x}\n\n".format( rh.MOD, rh.BASE ) );
+	print( "MOD = {:x}, BASE = {:x}, INVERSE = {:x}\n\n".format( rhKey.MOD, rhKey.BASE, rhKey.INVERSE ) );
+
+	rh = RollingHash( s[:keyLen] );
 
 	print( "FORWARD >>>\n\n" );
 	test( s, rhKey, rh, 0 );
 	for ( i : algo.range( size( s ) - keyLen ) ) {
-		rh.move( s[i + keyLen], s[i] );
+		rh.move( s[i + keyLen], s[i], DIRECTION.RIGHT );
 		test( s, rhKey, rh, i + 1 );
 	}
 
-	rhKey = RollingHash( argv_[1][::-1] );
-	rh = RollingHash( s[:-keyLen - 1:-1] );
+	rh = RollingHash( s[-keyLen:] );
 
 	print( "\nBACKWARD <<<\n\n" );
 	start = size( s ) - keyLen;
 	test( s, rhKey, rh, start );
 	for ( i : algo.range( start - 1, -1, -1 ) ) {
-		rh.move( s[i], s[i + keyLen] );
+		rh.move( s[i], s[i + keyLen], DIRECTION.LEFT );
 		test( s, rhKey, rh, i );
 	}
 	return ( 0 );
