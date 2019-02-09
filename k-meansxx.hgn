@@ -1,5 +1,5 @@
 #! /bin/sh
-exec huginn -E --no-argv "${0}" "${@}"
+exec huginn -E "${0}" "${@}"
 #! huginn
 
 import Algorithms as algo;
@@ -10,8 +10,6 @@ class Color { r = 0.; g = 0.; b = 0.; }
 class Point { x = 0.; y = 0.; group = -1; }
 
 k_means_initial_centroids( points_, clusterCount_ ) {
-	INF = 9999. ^ 9999.;
-
 	centroids = [];
 	discreteRng = math.Randomizer( math.Randomizer.DISTRIBUTION.DISCRETE, 0, size( points_ ) - 1 );
 	uniformRng = math.Randomizer( math.Randomizer.DISTRIBUTION.UNIFORM, 0.0, 1.0 );
@@ -20,7 +18,7 @@ k_means_initial_centroids( points_, clusterCount_ ) {
 		distances = [];
 		sum = 0.0;
 		for ( p : points_ ) {
-			shortestDist = INF;
+			shortestDist = math.INFINITY;
 			for ( c : centroids ) {
 				dx = c.x - p.x;
 				dy = c.y - p.y;
@@ -48,14 +46,12 @@ k_means_initial_centroids( points_, clusterCount_ ) {
 }
 
 k_means( points_, clusterCount_, maxError_ = 0.001, maxIter_ = 100 ) {
-	INF = 9999. ^ 9999.;
-
 	centroids = k_means_initial_centroids( points_, clusterCount_ );
 	pointCount = real( size( points_ ) );
 	for ( iter : algo.range( maxIter_ ) ) {
 		updated = 0.0;
 		for ( p : points_ ) {
-			shortestDist = INF;
+			shortestDist = math.INFINITY;
 			g = 0;
 			for ( c : centroids ) {
 				dx = c.x - p.x;
@@ -109,9 +105,73 @@ gen_points( numPoints_ ) {
 	return ( points );
 }
 
-main() {
-	points = gen_points( 30000 );
-	print_eps( points, k_means( points, 7 ) );
+import ProgramOptions as po;
+
+main( argv_ ) {
+	poh = po.Handler( "k-means++", "k-means++ clustering algorithm demo" );
+	poh.add_option(
+		name: "numPoints,N",
+		requirement: po.VALUE_REQUIREMENT.REQUIRED,
+		help: "number of points",
+		conversion: integer,
+		valueName: "num",
+		defaultValue: 30000
+	);
+	poh.add_option(
+		name: "numClusters,C",
+		requirement: po.VALUE_REQUIREMENT.REQUIRED,
+		help: "number of custers",
+		conversion: integer,
+		valueName: "num",
+		defaultValue: 7
+	);
+	poh.add_option(
+		name: "maxIterations,I",
+		requirement: po.VALUE_REQUIREMENT.REQUIRED,
+		help: "maximum number of iterations for the algorithm to run",
+		conversion: integer,
+		valueName: "num",
+		defaultValue: 100
+	);
+	poh.add_option(
+		name: "maxInvalidRatio,R",
+		requirement: po.VALUE_REQUIREMENT.REQUIRED,
+		help: "maximum ratio of points that are still assigned to invalid centroids",
+		conversion: real,
+		valueName: "num",
+		defaultValue: 0.001
+	);
+	poh.add_option(
+		name: "help,H",
+		requirement: po.VALUE_REQUIREMENT.NONE,
+		help: "show help information and stop"
+	);
+	poh.add_option(
+		name: "verbose,v",
+		requirement: po.VALUE_REQUIREMENT.NONE,
+		help: "show more info about program execution"
+	);
+	parsed = poh.command_line( argv_ );
+	if ( parsed == none ) {
+		return ( 1 );
+	}
+	if ( parsed.options["help"] ) {
+		print( poh.help_string() + "\n" );
+		return ( 0 );
+	}
+	if ( parsed.options["verbose"] ) {
+		os.stderr().write_line( string( parsed ) + "\n" );
+	}
+	points = gen_points( parsed.options["numPoints"] );
+	print_eps(
+		points,
+		k_means(
+			points,
+			parsed.options["numClusters"],
+			parsed.options["maxInvalidRatio"],
+			parsed.options["maxIterations"]
+		)
+	);
 }
 
 print_eps( points, cluster_centers, W = 400, H = 400 ) {
@@ -126,8 +186,8 @@ print_eps( points, cluster_centers, W = 400, H = 400 ) {
 			)
 		);
 	}
-	max_x = max_y = - 9999. ^ 9999.;
-	min_x = min_y = 9999. ^ 9999.;
+	max_x = max_y = - math.INFINITY;
+	min_x = min_y = math.INFINITY;
 	for ( p : points ) {
 		if ( max_x < p.x ) { max_x = p.x; }
 		if ( min_x > p.x ) { min_x = p.x; }
