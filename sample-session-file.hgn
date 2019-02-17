@@ -1,0 +1,335 @@
+// This file was generated automatically, do not edit it!
+//set color_scheme=dark-background
+//set error_context=short
+//set max_call_stack_size=1024
+//set module_path=${HOME}/.huginn:${HOME}/tmp/hgn:${HOME}/src/cellar/huginn-samples
+//set prompt=%phuginn[%P%i%p]>%x 
+//set session=default
+//import
+import Algorithms as algo;
+import Mathematics as math;
+import Text as text;
+import RegularExpressions as re;
+import FileSystem as fs;
+import OperatingSystem as os;
+import DateTime as dt;
+import Database as db;
+import Network as net;
+import Cryptography as crypto;
+import Introspection as intro;
+import XML as xml;
+import Operators as oper;
+import calendar as cal;
+//definition
+/*
+ * ( *x*, *y*, *μ*, *σ* ) - calculate probability of random variable with normal distribution N(*μ*,*σ*) having value between *x* and *y*.
+ */
+P( x, y, μ, σ ) {
+	μ = real( μ );
+	σ = real( σ );
+	Px = math.cumulative_distribution_function( real( x ), μ, σ );
+	Py = math.cumulative_distribution_function( real( y ), μ, σ );
+	return ( Py - Px );
+}
+
+/* ( *red*, *green*, *blue* ) - Calculate Luminance of color given by RGB value using HSP Color Model. */
+rgb2lum( r_, g_, b_ ) {
+	r = real( r_ );
+	g = real( g_ );
+	b = real( b_ );
+	lum = r ^ 2. * 0.299 + g ^ 2. * 0.587 + b ^ 2. * 0.114;
+	lum = math.square_root( lum );
+	lum = integer( lum );
+	return ( lum );
+}
+
+/* ( *hp* ) - Convert *hp* horsepower into Watts. */
+hp2watt( val_ ) {
+	return ( real( val_ ) * 745.699872 );
+}
+
+/* ( *watts* ) - Convert *watts* into horsepower. */
+watt2hp( val_ ) {
+	return ( real( val_ ) / 745.699872 );
+}
+
+class Celestial {
+	_name = none;
+	_mass = none;
+	_radius = none;
+	_orbiralPeriod = none;
+	_satellites = [];
+	_primary = none;
+	constructor( name_, mass_, radius_, orbitalPeriod_ = 0 ) {
+		_name = name_;
+		_mass = mass_;
+		_radius = radius_;
+		_orbitalPeriod = orbitalPeriod_;
+	}
+	add_satellite( satellite_ ) {
+		_satellites.push( satellite_ );
+		satellite_._primary = observe( this );
+	}
+	to_string() {
+		s = "Celestial body `{}` has mass of {} kilograms and radius of {} meters,".format(
+			_name, _mass, _radius
+		);
+		if ( _primary != none ) {
+			p = use( _primary );
+			s += " it orbits around `{}` and".format( p._name );
+		}
+		noOfSatellites = size( _satellites );
+		s += " it has {} satellite{}.".format(
+			noOfSatellites > 0 ? noOfSatellites : "no",
+			noOfSatellites != 1 ? "s" : ""
+		);
+		return ( s );
+	}
+}
+
+f( x, y = 7, args... ) {
+	return ( [ x, y, args ] );
+}
+
+g( x, y = 7, args..., kwArgs::: ) {
+	return ( [ x, y, args, kwArgs ] );
+}
+
+long( x, y, p = 0, q = 1, r = 2, s = 3, t = 4, args..., kwArgs::: ) {
+	return ( [ x, y, p, q, r, s, t, args, kwArgs ] );
+}
+
+keys( x ) {
+	v = [];
+	for ( k : x ) {
+		v.push( k );
+	}
+	return ( v );
+}
+
+key_values( x ) {
+	v = [];
+	for ( kv : x.values() ) {
+		v.push( kv );
+	}
+	return ( v );
+}
+
+/* Inheritance from built-in test. */
+class PEBKACException : Exception {
+	constructor() {
+		super.constructor( "PEBKAC exception!" );
+	}
+}
+
+/* Inheritance from built-in test. */
+class YaalException : Exception {
+	foo() {
+		super.what();
+	}
+}
+
+/* Base class for inheritance tests. */
+class Base {
+	_data = none;
+	constructor( data_ ) {
+		_data = data_;
+		return ( this );
+	}
+	foo() {
+		return ( "Base.foo()" );
+	}
+	to_string() {
+		return ( "Base({})".format( _data ) );
+	}
+}
+
+/* Inheritance test class. */
+class Derived : Base {
+	_name = none;
+	// Super contructor test.
+	constructor( name_, data_ ) {
+		super.constructor( data_ );
+		_name = name_;
+		return ( this );
+	}
+	foo() {
+		return ( "Derived.foo({})".format( super.foo() ) );
+	}
+	to_string() {
+		return ( "Derived( {}, {} )".format( _name, _data ) );
+	}
+}
+
+/* Multi level inheritance test class. */
+class Final : Derived {
+	_extra = none;
+	// Super contructor test.
+	constructor( name_, data_, extra_ = none ) {
+		super.constructor( name_, data_ );
+		_extra = extra_;
+		return ( this );
+	}
+	foo() {
+		return ( "Final.foo({})".format( super.foo() ) );
+	}
+	to_string() {
+		return ( "Final( {}, {}, {} )".format( _name, _data, _extra ) );
+	}
+}
+
+class PhysicalConstants {
+	/* Speed of light in vacuum. */
+	speed_of_light = $299792458;
+	gravitational_constant = $6.67408 * $10 ^ $-11;
+	to_string() {
+		return ( "PhysicalConstants()" );
+	}
+}
+
+/* ( *path_* ) - dump content of Huginn data serialization file pointed by *path_*. */
+bin_dump( path_ ) {
+	f = fs.open( path_, fs.OPEN_MODE.READ );
+	for ( _ : algo.range( 100 ) ) {
+		try {
+			print( "{}\n".format( f.deserialize() ) );
+		} catch ( ConversionException e ) {
+			print( "!!! {} caught: {}\n".format( type( e ), e.what() ) );
+		} catch ( StreamException e ) {
+			print( "!!! {} caught: {}\n".format( type( e ), e.what() ) );
+		} catch ( Exception e ) {
+			print( "{}: {}\n".format( type( e ), e.what() ) );
+			break;
+		}
+	}
+}
+
+/* Color channels enumeration. */
+enum COLOR {
+	/* Red color channel. */
+	RED,
+	/* Green color channel. */
+	GREEN,
+	/* Blue color channel. */
+	BLUE
+}
+
+class Functor {
+	_data = none;
+	constructor( data_ ) {
+		_data = data_;
+	}
+	call( x_ ) {
+		return ( "{} - {}".format( _data, x_ ) );
+	}
+	to_string() {
+		return ( "Functor( {} )".format( _data ) );
+	}
+}
+
+dump_node( n, log = none ) {
+	if ( log != none ) {
+		log.push( ( type( n ), n ) );
+	}
+	print( "{}: {}\n".format( type( n ), n.name() ) );
+	for ( e : n ) {
+		if ( type( e ) == xml.Element ) {
+			dump_node( e, log );
+		} else {
+			if ( log != none ) {
+				log.push( ( type( e ), e ) );
+			}
+			print( "{}: {}\n".format( type( e ), e.strip() ) );
+		}
+	}
+}
+
+class Virtual {
+	_data = none;
+	constructor( data_ = {} ) {
+		_data = data_;
+	}
+	subscript(key_) {
+		_data[key_];
+	}
+	set_subscript( key_, value_ ) {
+		_data[key_] = value_;
+	}
+	member(key_) {
+		_data[key_];
+	}
+	set_member( key_, value_ ) {
+		_data[key_] = value_;
+	}
+	to_string() {
+		return ( "Virtual({})".format( _data ) );
+	}
+}
+
+class ListNode {
+	_next = none;
+	_data = none;
+	constructor( data_, next_ ) {
+		_data = data_;
+		_next = next_;
+	}
+}
+
+class ListIterator {
+	_cur = none;
+	constructor( cur_ ) {
+		_cur = cur_;
+	}
+	is_valid() {
+		return ( _cur != none );
+	}
+	value() {
+		return ( _cur._data );
+	}
+	next() {
+		_cur = _cur._next;
+	}
+}
+
+class List {
+	_head = none;
+	add( data_ ) {
+		_head = ListNode( data_, _head );
+		return ( this );
+	}
+	get_size() {
+		node = _head;
+		i = 0;
+		while ( node != none ) {
+			node = node._next;
+			i += 1;
+		}
+		return ( i );
+	}
+	iterator() {
+		return ( ListIterator( _head ) );
+	}
+}
+
+//code
+pc = PhysicalConstants();
+myList = [188, 154, 57, 86, 85, 77, 51, 138, 101, 143, 21, 92, 45, 171, 44, 195, 52, 174, 180, 55, 179, 76, 72, 166, 95, 129, 135, 89, 112, 102, 108, 163];
+myLookup = {none: real, 1: 0, "aa": 3.14, 17: "abc"};
+myDict = [0: 1, 1: 2, 2: 4, 3: 8, 4: 16, 5: 32];
+overflow = -9223372036854775808;
+prime = 2305843009213693951;
+rollingHashPrime = 36028797018963913;
+special = "© ® ☺ ∫ ∑ ∏ π Π ÷ £ ¢ € ¥ $ × ∃ ∀ ∅ ± ° ∎ ∞ ∈ ⊕ ⋀ ⋁ ¬";
+Π = $3.14159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384461;
+π = 3.14159265359;
+Τ = $6.28318530717958647692528676655900576839433879875021164194988918461563281257241799725606965068423413596429617302656461329418768922;
+τ = 6.28318530718;
+ok = '✓';
+hl = "abc*\n* sss *B* sss *S* sss *{}* sss ** *ሴ* *􅙸*";
+eq = "2 + 2 * 2";
+col = [[1: 2], {3: 4}, {5}, (6,), {$-3: 3, $4: 4, $-4: 4, $0: 0, $1: 1, $2: 2, $-1: -1, $3: 3, $-2: 2}];
+unicode = "ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖʳˢᵗᵘᵛʷˣʸᶻ ᴬᴮᴰᴱᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾᴿᵀᵁⱽᵂ ⁰¹²³⁴⁵⁶⁷⁸⁹ ₐₑₕᵢⱼₖₗₘₙₒₚᵣₛₜᵤᵥₓ ₀₁₂₃₄₅₆₇₈₉";
+alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+rng = math.Randomizer(math.Randomizer.DISTRIBUTION.NORMAL, 0.0, 1.0);
+v = Virtual({"mem": 0});
+// vim: ft=huginn
