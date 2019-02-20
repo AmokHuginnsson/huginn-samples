@@ -15,7 +15,7 @@ make_game( rndGen_ ) {
 }
 
 main() {
-	rndGen = math.Randomizer( 9 );
+	rndGen = math.Randomizer( math.Randomizer.DISTRIBUTION.DISCRETE, 0, 8 );
 	no = 0;
 	dd = re.compile( "\\d\\d" );
 	while ( true ) {
