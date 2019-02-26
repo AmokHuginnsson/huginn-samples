@@ -22,14 +22,14 @@ class Compass {
 		d = d % 360. + 360. / 64.;
 		majorindex, minor = ( integer( d ) / 90, d % 90. );
 		minorindex  = integer( minor * 4. ) / 45;
-		p1, p2 = _majors[majorindex: majorindex+2];
+		p1, p2 = _majors[majorindex: majorindex + 2];
 		q = none;
 		if ( p1 ∈ { "north", "south" } ) {
 			q = _quarter1;
 		} else {
 			q = _quarter2;
 		}
-		return ( text.capitalize( q[minorindex].replace( "N", p1 ).replace( "E", p2 ) ) );
+		return ( text.capitalize( copy( q[minorindex] ).replace( "N", p1 ).replace( "E", p2 ) ) );
 	}
 }
 
