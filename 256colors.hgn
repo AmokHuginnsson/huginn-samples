@@ -3,9 +3,10 @@ exec huginn --no-argv -E "${0}"
 #! huginn
 
 /*
+ * Based on:
  * Author: Todd Larason <jtl@molehill.org>
  * $XFree86: xc/programs/xterm/vttests/256colors2.pl,v 1.2 2002/03/26 01:46:43 dickey Exp $
-
+ *
  * use the resources for colors 0-15 - usually more-or-less a
  * reproduction of the standard ANSI colors, but possibly more
  * pleasing shades
@@ -15,19 +16,15 @@ import Algorithms as algo;
 
 main() {
 	// colors 16-231 are a 6x6x6 color cube
-	for ( red : algo.range( 6 ) ) {
-		for ( green : algo.range( 6 ) ) {
-			for ( blue : algo.range( 6 ) ) {
-				print(
-					"\x1b]4;{};rgb:{:02x}/{:02x}/{:02x}\x1b\\".format(
-						16 + ( red * 36 ) + ( green * 6 ) + blue,
-						( red > 0 ? ( red * 40 + 55) : 0 ),
-						( green > 0 ? ( green * 40 + 55 ) : 0 ),
-						( blue > 0 ? ( blue * 40 + 55 ) : 0 )
-					)
-				);
-			}
-		}
+	for ( red, green, blue : algo.product( algo.range( 6 ), algo.range( 6 ), algo.range( 6 ) ) ) {
+		print(
+			"\x1b]4;{};rgb:{:02x}/{:02x}/{:02x}\x1b\\".format(
+				16 + ( red * 36 ) + ( green * 6 ) + blue,
+				( red > 0 ? ( red * 40 + 55) : 0 ),
+				( green > 0 ? ( green * 40 + 55 ) : 0 ),
+				( blue > 0 ? ( blue * 40 + 55 ) : 0 )
+			)
+		);
 	}
 
 	// colors 232-255 are a grayscale ramp, intentionally leaving out
