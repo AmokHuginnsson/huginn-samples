@@ -1,0 +1,65 @@
+#! /bin/sh
+exec huginn -E "${0}" "${@}"
+#! huginn
+
+import Algorithms as algo;
+import Text as text;
+import Operators as oper;
+import Progress as progress;
+
+to_digit( char_ ) {
+	return ( number( integer( char_ ) - integer( '0' ) ) );
+}
+
+persistence( num_ ) {
+	n = 0;
+	while ( true ) {
+		s = string( num_ );
+		if ( size( s ) == 1 ) {
+			break;
+		}
+		n += 1;
+		num_ = algo.reduce(
+			algo.map(
+				s,
+				to_digit
+			),
+			oper.multiply,
+			$1
+		);
+	}
+	return ( n );
+}
+
+main( argv_ ) {
+	limit = integer( argv_[1] );
+	digits = ( ( $2, 3 ), ( $3, 2 ), ( $7, limit ), ( $8, limit ), ( $9, limit ) );
+	parts = [];
+	best = 1;
+
+	for ( i, digit : algo.enumerate( digits ) ) {
+		part = [];
+		for ( repeat : algo.range( digit[1] ) ) {
+			part.push( digit[0] ^ number( repeat ) );
+		}
+		parts.push( part );
+	}
+
+	for ( trialDesc : progress.bar( algo.product( algo.range( 3 ), algo.range( 2 ), algo.range( limit ), algo.range( limit ), algo.range( limit ) ) ) ) {
+		n = $1;
+		for ( i, count : algo.enumerate( trialDesc ) ) {
+			n *= parts[i][count];
+		}
+		current = persistence( n );
+		if ( current > best ) {
+			best = current;
+			s = "";
+			for ( digit, count : algo.zip( digits, trialDesc ) ) {
+				s += text.repeat( string( digit[0] ), count );
+			}
+			print( "\n{} - {}\n".format( s, best + 1 ) );
+		}
+	}
+	return ( 0 );
+}
+

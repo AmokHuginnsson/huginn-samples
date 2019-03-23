@@ -1,0 +1,38 @@
+#! /bin/sh
+exec huginn -E "${0}" "${@}"
+#! huginn
+
+import Algorithms as algo;
+import Operators as oper;
+
+to_digit( char_ ) {
+	return ( number( integer( char_ ) - integer( '0' ) ) );
+}
+
+persistence( num_ ) {
+	n = 0;
+	while ( true ) {
+		s = string( num_ );
+		if ( size( s ) == 1 ) {
+			print( "{}\nnumber of steps = {}\n".format( s, n ) );
+			break;
+		}
+		n += 1;
+		print( "{}\n".format( num_ ) );
+		num_ = algo.reduce(
+			algo.map(
+				s,
+				to_digit
+			),
+			oper.multiply,
+			$1
+		);
+	}
+	return ( n );
+}
+
+main( argv_ ) {
+	persistence( number( argv_[1] ) );
+	return ( 0 );
+}
+
