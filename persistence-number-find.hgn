@@ -45,7 +45,17 @@ main( argv_ ) {
 		parts.push( part );
 	}
 
-	for ( trialDesc : progress.bar( algo.product( algo.range( 3 ), algo.range( 2 ), algo.range( limit ), algo.range( limit ), algo.range( limit ) ) ) ) {
+	for (
+		trialDesc : progress.bar(
+			algo.product(
+				algo.range( 3 ),
+				algo.range( 2 ),
+				algo.range( limit ),
+				algo.range( limit ),
+				algo.range( limit )
+			)
+		)
+	) {
 		n = $1;
 		for ( i, count : algo.enumerate( trialDesc ) ) {
 			n *= parts[i][count];
