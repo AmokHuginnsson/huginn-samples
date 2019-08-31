@@ -194,7 +194,7 @@ print_eps( points, cluster_centers, W = 400, H = 400 ) {
 		if ( max_y < p.y ) { max_y = p.y; }
 		if ( min_y > p.y ) { min_y = p.y; }
 	}
-	scale = algo.min( real( W ) / ( max_x - min_x ), real( H ) / ( max_y - min_y ) );
+	scale = math.min( real( W ) / ( max_x - min_x ), real( H ) / ( max_y - min_y ) );
 	cx = ( max_x + min_x ) / 2.;
 	cy = ( max_y + min_y ) / 2.;
 	print( "%!PS-Adobe-3.0\n%%BoundingBox: -5 -5 {} {}\n".format( W + 10, H + 10 ) );

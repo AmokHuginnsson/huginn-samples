@@ -3,22 +3,8 @@
 //set error_context=short
 //set max_call_stack_size=1024
 //set module_path=${HOME}/.huginn:${HOME}/tmp/hgn:${HOME}/src/cellar/huginn-samples
-//set prompt=%phuginn[%P%i%p]>%x 
 //set session=default
 //import
-import Algorithms as algo;
-import Mathematics as math;
-import Text as text;
-import RegularExpressions as re;
-import FileSystem as fs;
-import OperatingSystem as os;
-import DateTime as dt;
-import Database as db;
-import Network as net;
-import Cryptography as crypto;
-import Introspection as intro;
-import XML as xml;
-import Operators as oper;
 import calendar as cal;
 //definition
 /*
@@ -262,7 +248,7 @@ class Virtual {
 		_data[key_] = value_;
 	}
 	to_string() {
-		return ( "Virtual({})".format( _data ) );
+		return ( "Virtual({})".format( intro.code( _data ) ) );
 	}
 }
 
@@ -327,9 +313,11 @@ special = "© ® ☺ ∫ ∑ ∏ π Π ÷ £ ¢ € ¥ $ × ∃ ∀ ∅ ± ° �
 ok = '✓';
 hl = "abc*\n* sss *B* sss *S* sss *{}* sss ** *ሴ* *􅙸*";
 eq = "2 + 2 * 2";
-col = [[1: 2], {3: 4}, {5}, (6,), {$-3: 3, $4: 4, $-4: 4, $0: 0, $1: 1, $2: 2, $-1: -1, $3: 3, $-2: 2}];
+col = [[1: 2], {3: 4}, {5}, (6,), {$-3: 3, $4: 4, $-4: 4, $0: 0, $1: 1, $-1: -1, $2: 2, $-2: 2, $3: 3}];
 unicode = "ᵃᵇᶜᵈᵉᶠᵍʰⁱʲᵏˡᵐⁿᵒᵖʳˢᵗᵘᵛʷˣʸᶻ ᴬᴮᴰᴱᴳᴴᴵᴶᴷᴸᴹᴺᴼᴾᴿᵀᵁⱽᵂ ⁰¹²³⁴⁵⁶⁷⁸⁹ ₐₑₕᵢⱼₖₗₘₙₒₚᵣₛₜᵤᵥₓ ₀₁₂₃₄₅₆₇₈₉";
 alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 rng = math.Randomizer(math.Randomizer.DISTRIBUTION.NORMAL, 0.0, 1.0);
-v = Virtual({"mem": 0});
+zeros = {0: integer, 0.0: real, none: none, false: boolean, $0: number, '0': character, "0": string};
+bday = Time(1978, 5, 24, 23, 30, 17);
+virt = Virtual({"mem": 0});
 // vim: ft=huginn

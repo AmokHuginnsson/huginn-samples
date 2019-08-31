@@ -3,6 +3,7 @@ exec huginn -E "${0}" "${@}"
 #! huginn
 
 import Algorithms as algo;
+import Mathematics as math;
 import Network as net;
 import Text as text;
 
@@ -18,7 +19,7 @@ main( argv_ ) {
 		),
 		list
 	);
-	maxLen = algo.reduce( ordered, @( x, y ){ algo.max( x, size( y ) ); }, 0 );
+	maxLen = algo.reduce( ordered, @( x, y ){ math.max( x, size( y ) ); }, 0 );
 	maxOrderedWords = algo.materialize(
 		algo.filter( ordered, @[maxLen]( word ){ size( word ) == maxLen; } ),
 		list

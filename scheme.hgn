@@ -12,7 +12,7 @@ class Env {
 	_data = {};
 	_outer = none;
 	constructor( params_ = (), args_ = (), outer_ = none ) {
-		for ( i : algo.range( algo.min( size( params_ ), size( args_ ) ) ) ) {
+		for ( i : algo.range( math.min( size( params_ ), size( args_ ) ) ) ) {
 			_data[params_[i]] = args_[i];
 		}
 		_outer = outer_;
@@ -66,8 +66,8 @@ standard_env() {
 		"list":       @( x... ){ algo.materialize( x, list ); },
 		"list?":      @( x )   { type( x ) == list; },
 		"map":        @( x, y ){ algo.materialize( algo.map( y, x ), list ); },
-		"max":        algo.max,
-		"min":        algo.min,
+		"max":        math.max,
+		"min":        math.min,
 		"not":        op.not,
 		"null?":      @( x )   { x == []; },
 		"number?":    @( x )   { t = type( x ); ( t == real ) || ( t == integer ); },

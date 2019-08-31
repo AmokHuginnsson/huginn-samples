@@ -3,11 +3,12 @@ exec huginn -E "${0}" "${@}"
 #! huginn
 
 import Algorithms as algo;
+import Mathematics as math;
 
 fib( n_ ) {
 	a = number( 0 );
 	b = number( 1 );
-	for ( _ : algo.range( algo.max( n_ - 1, 0 ) ) ) {
+	for ( _ : algo.range( math.max( n_ - 1, 0 ) ) ) {
 		a, b = ( b, a + b );
 	}
 	if ( n_ == 0 ) {
