@@ -69,7 +69,7 @@ class Graph {
 		todo = algo.sorted( paths, @(x){-x._cost;} );
 		while ( size( todo ) > 0 ) {
 			node = todo[-1]._id;
-			todo.resize( size( todo ) - 1, none );
+			todo.pop();
 			if ( node >= size( _neighbours ) ) {
 				continue;
 			}
