@@ -13,54 +13,30 @@ exec huginn --no-argv -E "${0}"
  */
 
 import Algorithms as algo;
+import Terminal as term;
 
 main() {
-	// colors 16-231 are a 6x6x6 color cube
-	for ( red, green, blue : algo.product( algo.range( 6 ), algo.range( 6 ), algo.range( 6 ) ) ) {
-		print(
-			"\x1b]4;{};rgb:{:02x}/{:02x}/{:02x}\x1b\\".format(
-				16 + ( red * 36 ) + ( green * 6 ) + blue,
-				( red > 0 ? ( red * 40 + 55) : 0 ),
-				( green > 0 ? ( green * 40 + 55 ) : 0 ),
-				( blue > 0 ? ( blue * 40 + 55 ) : 0 )
-			)
-		);
-	}
-
-	// colors 232-255 are a grayscale ramp, intentionally leaving out
-	// black and white
-	for ( gray : algo.range( 24 ) ) {
-		level = ( gray * 10 ) + 8;
-		print(
-			"\x1b]4;{};rgb:{:02x}/{:02x}/{:02x}\x1b\\".format(
-			 232 + gray, level, level, level
-			)
-		);
-	}
-
-
 	// display the colors
 
 	// first the system ones:
 	print( "System colors:\n" );
-	for ( color : algo.range( 8 ) ) {
-		print( "\x1b[48;5;{}m  ".format( color ) );
+	for ( color : [ term.COLOR.BLACK, term.COLOR.RED, term.COLOR.GREEN, term.COLOR.BROWN, term.COLOR.BLUE, term.COLOR.MAGENTA, term.COLOR.CYAN, term.COLOR.LIGHTGRAY ] ) {
+		print( term.color( color, "██" ) );
 	}
-	print( "\x1b[0m\n" );
-	for ( color : algo.range( 8, 16 ) ) {
-		print( "\x1b[48;5;{}m  ".format( color ) );
+	print( "\n" );
+	for ( color : [ term.COLOR.GRAY, term.COLOR.BRIGHTRED, term.COLOR.BRIGHTGREEN, term.COLOR.YELLOW, term.COLOR.BRIGHTBLUE, term.COLOR.BRIGHTMAGENTA, term.COLOR.BRIGHTCYAN, term.COLOR.WHITE ] ) {
+		print( term.color( color, "██" ) );
 	}
-	print( "\x1b[0m\n\n" );
+	print( "\n\n" );
 
 	// now the color cube
 	print( "Color cube, 6x6x6:\n" );
 	for ( green : algo.range( 6 ) ) {
 		for ( red : algo.range( 6 ) ) {
 			for ( blue : algo.range( 6 ) ) {
-				color = 16 + ( red * 36 ) + ( green * 6 ) + blue;
-				print( "\x1b[48;5;{}m  ".format( color ) );
+				print( term.color256( red, green, blue, "██" ) );
 			}
-			print( "\x1b[0m " );
+			print( " " );
 		}
 		print( "\n" );
 	}
@@ -68,10 +44,10 @@ main() {
 
 	// now the grayscale ramp
 	print( "Grayscale ramp:\n" );
-	for ( color : algo.range( 232, 256 ) ) {
-		print( "\x1b[48;5;{}m  ".format( color ) );
+	for ( color : algo.range( 24 ) ) {
+		print( term.gray_scale( color, "██" ) );
 	}
-	print( "\x1b[0m\n" );
+	print( "\n" );
 	return ( 0 );
 }
 
