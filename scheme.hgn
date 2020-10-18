@@ -57,8 +57,8 @@ standard_env() {
 		"append":     @( x, y ){ cc( x, y ) + cc( y, x ); },
 		"apply":      @( x, y ){ x( y... ); },
 		"begin":      @( x... ){ x[-1]; },
-		"car":        @( x )   { x[0]; },
-		"cdr":        @( x )   { x[1:]; },
+		"car":        op.subscript( ~, 0 ),
+		"cdr":        op.range( ~, 1 ),
 		"cons":       @( x, y ){ [x] + y; },
 		"eq?":        @( x, y ){ cc( x, y ) == cc( y, x ); },
 		"equal?":     @( x, y ){ cc( x, y ) == cc( y, x ); },
@@ -263,7 +263,7 @@ main( argv_ ) {
 	if ( size( argv_ ) > 1 ) {
 		for ( a : argv_[1:] ) {
 			f = fs.open( a, fs.OPEN_MODE.READ );
-			interpret( @[f](){ f.read_line(); }, env );
+			interpret( f.read_line, env );
 		}
 	} else {
 		interpret( input, env );

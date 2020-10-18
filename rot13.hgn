@@ -3,6 +3,7 @@ exec huginn --no-argv -E "${0}" "${@}"
 #! huginn
 
 import Algorithms as algo;
+import Operators as oper;
 
 rot13char( c ) {
 	if ( c.is_alpha() ) {
@@ -24,7 +25,7 @@ rot13( s ) {
 				algo.map( s, rot13char ),
 				string
 			),
-			@( r, c ) { r + c; }
+			oper.add
 		)
 	);
 }
